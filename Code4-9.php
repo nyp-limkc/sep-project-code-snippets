@@ -1,41 +1,32 @@
-<h1>Update Profile page</h1>
-    <?php 
+function updateProfile() {
+    global $conn;
+    if(!empty($_POST)) {
+        session_start();
+        $id = $_POST["id"];
+        $name = $_POST["name"];
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+        $mobileNumber = $_POST["mobileNumber"];
+        $address = $_POST["address"];
+
+        mysqli_query($conn,"UPDATE users set name='$name', email='$email',password=MD5('$password') where id=$id");
+        mysqli_query($conn,"UPDATE customers set mobileNumber=$mobileNumber,address='$address' where user_id=$id");
+
+        //update the session variable as well to reflect changes on the UI
         $user = $_SESSION["loggedInUser"];
-        $customer = getCustomerRecord($user["id"]);
-    ?>
-    <form action="../../controllers/customerController.php?function=update" method="post" onsubmit="return validatePassword(event);">
-        <label for="name">Name:</label>
-        <input type="text" name="name" id="name" value="<?=$user["name"];?>" required><br>
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" value="<?=$user["email"];?>" required><br>
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required><br>
-        <label for="mobileNumer">Mobile Number:</label>
-        <input type="number" name="mobileNumber" id="mobileNumber" value="<?=$customer["mobileNumber"];?>" required><br>
-        <label for="address">Address:</label>
-        <textarea name="address" id="address" cols="20" rows="5" required><?=$customer["address"];?></textarea><br>
-        <input type="hidden" name="id" value="<?=$user["id"]?>">
-        <input type="submit" value="Submit">
-    </form>
-    <div>
-        <?php
-            if(isset($_SESSION["updateProfileMessage"])) {
-                echo $_SESSION["updateProfileMessage"];
-                unset($_SESSION["updateProfileMessage"]);
-            }
-        ?>
-    </div>
-</section>
-<script src="../js/jquery-3.5.1.min.js"></script>
-<script>
-    function validatePassword(e) 
-    {
-        //to retreive the password field (3rd field) from the form
-        let password = $(e.target["2"]).val();  
-        if(!password.match(/(?=.{6,}$)(?=.*[A-Z])(?=.*\d).*/g)) {
-            alert("Invalid password. Ensure that password is at least 6 characters long with at least one uppercase letter and one digit");
-            return false;
-        }
-        return true;
+        $user["name"] = $name;
+        $user["email"] = $email;
+        $_SESSION["loggedInUser"] = $user;
+
+        $_SESSION["updateProfileMessage"] = "Updated profile successfully!";
+        //go back to previous page
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
-</script>
+}
+
+function getCustomerRecord($id){
+    global $conn;   
+    $query = mysqli_query($conn,"SELECT * from customers where user_id=$id");
+    $result = mysqli_fetch_assoc($query);
+    return $result;
+}

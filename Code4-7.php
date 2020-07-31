@@ -1,32 +1,11 @@
-function updateProfile() {
+function removeOutstandingOrders() {
     global $conn;
-    if(!empty($_POST)) {
-        session_start();
-        $id = $_POST["id"];
-        $name = $_POST["name"];
-        $email = $_POST["email"];
-        $password = $_POST["password"];
-        $mobileNumber = $_POST["mobileNumber"];
-        $address = $_POST["address"];
-
-        mysqli_query($conn,"UPDATE users set name='$name', email='$email',password=MD5('$password') where id=$id");
-        mysqli_query($conn,"UPDATE customers set mobileNumber=$mobileNumber,address='$address' where user_id=$id");
-
-        //update the session variable as well to reflect changes on the UI
-        $user = $_SESSION["loggedInUser"];
-        $user["name"] = $name;
-        $user["email"] = $email;
-        $_SESSION["loggedInUser"] = $user;
-
-        $_SESSION["updateProfileMessage"] = "Updated profile successfully!";
-        //go back to previous page
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    $customer_id =  $_SESSION["loggedInUser"]["id"];
+    $order_query = mysqli_query($conn,"SELECT * from orders where customer_id=$customer_id and checked_out=0");
+    $order_query_result = mysqli_fetch_assoc($order_query);
+    //remove all outstanding un-checked out orders from db
+    if($order_query_result) {
+        $order_id = $order_query_result["id"];
+        mysqli_query($conn, "DELETE from orders where id=$order_id");
     }
-}
-
-function getCustomerRecord($id){
-    global $conn;   
-    $query = mysqli_query($conn,"SELECT * from customers where user_id=$id");
-    $result = mysqli_fetch_assoc($query);
-    return $result;
 }
