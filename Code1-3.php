@@ -5,5 +5,7 @@ if(isset($_SESSION["loggedInUser"])) {
         header("Location: ./views/admin/index.php");
     } else if($role=="merchant") {
         header("Location: ./views/merchant/index.php");
+    } else if($role=="rider") {
+        header("Location: ./views/rider/index.php");
     }
 }

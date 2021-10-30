@@ -26,7 +26,7 @@ function updateProfile() {
 
 function getCustomerRecord($id){
     global $conn;   
-    $query = mysqli_query($conn,"SELECT * from customers where user_id=$id");
+    $query = mysqli_query($conn,"SELECT * from customers c inner join users u on c.user_id=u.id where user_id=$id");
     $result = mysqli_fetch_assoc($query);
     return $result;
 }
