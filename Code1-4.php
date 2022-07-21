@@ -9,7 +9,6 @@ if(isset($_GET["function"])) {
 }
 
 function registerCustomer() {
-    global $conn; //to refer to the $conn variable defined in connection.php
     if(!empty($_POST)) {
         session_start();
         $name = $_POST["name"];
@@ -18,16 +17,17 @@ function registerCustomer() {
         $mobileNumber = $_POST["mobileNumber"];
         $address = $_POST["address"];       
 
-        mysqli_query($conn,"INSERT into users(name,email,password,role) values ('$name','$email',MD5('$password'),'customer')");
-		//to obtain the newly inserted id in the users table
-        $last_id = mysqli_insert_id($conn); 
-        mysqli_query($conn,"INSERT into customers(user_id,mobileNumber,address) values ($last_id,$mobileNumber,'$address')");
+        $sqlStatement = "INSERT into users(name,email,password,role) values ('$name','$email',MD5('$password'),'customer')";
+        $last_id = executeQuery($sqlStatement);
+
+        $sqlStatement = "INSERT into customers(user_id,mobileNumber,address) values ($last_id,$mobileNumber,'$address')";
+        executeQuery($sqlStatement);
+
 
         //to obtain the registered user info to put into session
-        $login_query = mysqli_query($conn,"SELECT * from users where id=$last_id");
-        $result = mysqli_fetch_assoc($login_query);
-        $_SESSION["loggedInUser"] = $result;
+        $sqlStatement = "SELECT * from users where id=$last_id";
+        $_SESSION["loggedInUser"] = findOne($sqlStatement);
 
-        header("Location: /delivery");
+        header("Location: $GLOBALS[path]");
     }
 }

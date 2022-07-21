@@ -8,7 +8,6 @@ if(isset($_GET["function"])) {
 }
 
 function registerMerchant() {
-    global $conn;
     if(!empty($_POST)) {
         session_start();
         $name = $_POST["name"];
@@ -17,15 +16,15 @@ function registerMerchant() {
         $mobileNumber = $_POST["mobileNumber"];
         $company = $_POST["company"];
 
-        mysqli_query($conn,"INSERT into users(name,email,password,role) values ('$name','$email',MD5('$password'),'merchant')");
-        $last_id = mysqli_insert_id($conn);
+        $sqlStatement = "INSERT into users(name,email,password,role) values ('$name','$email',MD5('$password'),'merchant')";
+        $last_id = executeQuery($sqlStatement);
 
-        mysqli_query($conn,"INSERT into merchants(user_id,mobileNumber,company) values ($last_id,$mobileNumber,'$company')");
+        $sqlStatement = "INSERT into merchants(user_id,mobileNumber,company) values ($last_id,$mobileNumber,'$company')";
+        executeQuery($sqlStatement);
 
         //to obtain the registered user info to put into session
-        $login_query = mysqli_query($conn,"SELECT * from users where id=$last_id");
-        $result = mysqli_fetch_assoc($login_query);
-        $_SESSION["loggedInUser"] = $result;
+        $sqlStatement = "SELECT * from users where id=$last_id";
+        $_SESSION["loggedInUser"] = findOne($sqlStatement);
 
         header("Location: ../views/merchant/index.php");
     }

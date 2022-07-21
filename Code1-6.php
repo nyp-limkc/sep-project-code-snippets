@@ -10,7 +10,6 @@ if(isset($_GET["function"])) {
 }
 
 function registerRider() {
-    global $conn;
     if(!empty($_POST)) {
         session_start();
         $name = $_POST["name"];
@@ -20,14 +19,15 @@ function registerRider() {
         $vehicle = $_POST["vehicleNumber"];
         $account = $_POST["accountNumber"];
 
-        mysqli_query($conn,"INSERT into users(name,email,password,role) values ('$name','$email',MD5('$password'),'rider')");
-        $last_id = mysqli_insert_id($conn);
+        $sqlStatement = "INSERT into users(name,email,password,role) values ('$name','$email',MD5('$password'),'rider')";
+        $last_id = executeQuery($sqlStatement);
 
-        mysqli_query($conn,"INSERT into riders(user_id,mobile_number,vehicle_number,account_number) values ($last_id,$mobileNumber,'$vehicle','$account')");
+        $sqlStatement = "INSERT into riders(user_id,mobile_number,vehicle_number,account_number) values ($last_id,$mobileNumber,'$vehicle','$account')";
+        executeQuery($sqlStatement);
 
         //to obtain the registered user info to put into session
-        $login_query = mysqli_query($conn,"SELECT * from users where id=$last_id");
-        $result = mysqli_fetch_assoc($login_query);
+        $sqlStatement = "SELECT * from users where id=$last_id";
+        $result = findOne($sqlStatement);
         $_SESSION["loggedInUser"] = $result;
 
         header("Location: ../views/rider/index.php");
