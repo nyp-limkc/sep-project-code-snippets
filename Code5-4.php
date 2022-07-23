@@ -1,4 +1,3 @@
-<section>
 <ol>
 <?php
     if(count($availableOrders)==0) {
@@ -13,16 +12,19 @@
                     Delivery Date & Time: <u><?=$order["delivery_date"]?> <?=$order["delivery_time"]?></u><br><br>
                     <?php foreach($orderDetails as $details) {
                         $restaurant = getRestaurantFromItem($details["item_id"]);
-                        echo "<b>Restaurant:</b> ".$restaurant["name"]." ( ".$restaurant["address"]." )<br>";
-                        echo "<b>Item:</b> ".$restaurant["itemName"]." x ".$details["quantity"]."<br><br>";
+                        echo "<b>Restaurant:</b> $restaurant[name] ( $restaurant[address] )<br>";
+                        echo "<b>Item:</b> $restaurant[itemName] x $details[quantity]<br><br>";
                     }?>
 
                     Deliver to: <?=$customer["name"]. " at " . $customer["address"]?><br>
-                    <h2>Accept job function to be implemented by students</h2>
+                    <form action="../../controllers/jobController.php?function=accept" method="post">
+                        <input type="hidden" name="orderId" value="<?=$order["id"]?>">
+                        <input type="hidden" name="userId" value="<?=$user["id"]?>">
+                        <input type="submit" value="Accept Job">
+                    </form>
             </li>
     <?php
         }
     }
     ?>
 </ol>
-</section>
