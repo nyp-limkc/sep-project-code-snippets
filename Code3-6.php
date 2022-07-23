@@ -12,7 +12,7 @@
         <?php
             $cuisines = getCuisines();
             foreach ($cuisines as $cuisine) {
-                echo "<option value='".$cuisine["id"]."'>".$cuisine["name"]."</option>";
+                echo "<option value='$cuisine[id]'>$cuisine[name]</option>";
             }
         ?>
         </select><br>

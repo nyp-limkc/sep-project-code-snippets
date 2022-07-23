@@ -1,6 +1,4 @@
-<section class="searchSection">
-    <form method="post">
-        <input type="text" name="search" id="search" size="40" placeholder="Search restaurants">
-        <input type="submit" value="Search">
-    </form>
-</section>
+function updateRewardAvailability($id) {
+    $sqlStatement = "UPDATE rewards SET availability=availability-1 WHERE id=$id";
+    executeQuery($sqlStatement);
+}

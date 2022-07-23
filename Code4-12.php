@@ -1,6 +1,11 @@
-function searchRestaurants($search) {
-    global $conn;
-    $query = mysqli_query($conn,"SELECT r.*, c.name as cuisine from restaurants r INNER JOIN cuisines c on c.id=r.cuisine_id where r.name like '%$search%'");
-    $result = mysqli_fetch_all($query, MYSQLI_ASSOC); 
-    return $result;
-}
+<section class="searchSection">
+    <form method="post">
+        <input type="text" name="search" id="search" size="40" placeholder="Search restaurants">
+        <input type="submit" value="Search">
+    </form>
+</section>
+<?php
+    if(isset($_POST['search']) && $_POST['search']!="") {
+        echo "Showing search results for \"". $_POST['search'] . "\"<br><br>";
+    }
+?>

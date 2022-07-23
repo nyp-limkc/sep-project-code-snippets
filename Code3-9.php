@@ -1,6 +1,5 @@
-function getRestaurantById($id) {
-    global $conn;
-    $query = mysqli_query($conn,"SELECT r.*, c.name as cuisine from restaurants r INNER JOIN cuisines c on c.id=r.cuisine_id where r.id=$id");
-    $result = mysqli_fetch_assoc($query); 
-    return $result;
-}
+require_once "../../controllers/restaurantController.php";
+
+$restaurant_id = $_GET["id"];
+
+$restaurant = getRestaurantById($restaurant_id);

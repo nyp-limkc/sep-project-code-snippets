@@ -34,11 +34,11 @@
                             $disc = $item["discount"];
                             $price = $item["price"];
                             if($disc==0) {
-                                echo "Price: $".$price;
+                                echo "Price: $$price";
                             } else {
                                 //round to two decimal points
                                 $price = round($price*(100-$disc)/100,2);
-                                echo "Price: $".$price." <strike>$".$item["price"]."</strike> (".$disc."% discount)";
+                                echo "Price: $$price <strike>$$item[price]</strike> ($disc% discount)";
                             }
                         ?>
                     </div>

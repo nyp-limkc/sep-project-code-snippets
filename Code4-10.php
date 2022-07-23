@@ -8,4 +8,3 @@ Email: <?=$user["email"];?><br>
 Mobile Number: <?=$customer["mobileNumber"];?><br>
 Address: <?=$customer["address"];?><br>
 Reward Points: <?=$customer["reward_points"];?><br>
-<a href="updateProfile.php"><button>Update Profile</button></a>

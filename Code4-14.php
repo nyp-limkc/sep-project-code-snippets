@@ -1,4 +1,4 @@
-function updateRewardAvailability($id) {
-    global $conn;
-    mysqli_query($conn, "UPDATE rewards SET availability=availability-1 WHERE id=$id");
-}
+function updateRewardPoints($id,$reward_points) {
+    $sqlStatement = "UPDATE customers set reward_points=$reward_points where user_id=$id";
+    executeQuery($sqlStatement);
+} 
