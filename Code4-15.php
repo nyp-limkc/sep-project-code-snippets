@@ -9,9 +9,6 @@ if(isset($_GET["function"])) {
         case "add":
             addRewardRedemption();
         break;
-        case "updateUsed":
-            updateUsedReward();
-        break;
     }
 }
 
